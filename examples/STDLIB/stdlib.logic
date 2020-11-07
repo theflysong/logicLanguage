@@ -1,0 +1,4 @@
+%link("stdlib")
+
+import <stdio>
+import <stdmath>

@@ -1,0 +1,3 @@
+%link("stdlib")
+
+import <stdtype>

@@ -1,0 +1,5 @@
+import <stdlib>
+
+a = int(input())
+b = int(input())
+null = out(a + b)

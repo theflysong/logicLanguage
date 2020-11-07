@@ -1,0 +1,6 @@
+%link("stdlib")
+
+import <stdtype>
+
+native [string]input() = native_method("input()S");
+native [void]output([string] str) = native_method("output(S)V");

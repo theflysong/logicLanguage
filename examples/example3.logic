@@ -1,0 +1,17 @@
+import <stdlib>
+
+fib(x) = {
+    x == 1 || x == 2: 1;
+    else: fib(x - 1) + fib(x - 2);
+}
+
+/--
+[int]fib([int] x) = {        
+    x == 1 || x == 2: 1;
+    else: fib(x - 1) + fib(x - 2);
+}
+
+fib(x) = x == 1 || x == 2 ? 1 : fib(x - 1) + fib(x - 2);
+--/
+
+null = out(fib(int(input())))

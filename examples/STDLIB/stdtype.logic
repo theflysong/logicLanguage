@@ -1,0 +1,3 @@
+%link("stdlib")
+
+native int = {native_class("integer")}
