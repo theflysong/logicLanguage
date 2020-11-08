@@ -4,12 +4,13 @@
 
 int main(int argc, char** argv) {
 	Executer exe;
-	exe.addIns(new NormalIns(Ins::NOP));
-	exe.addIns(new NormalIns(Ins::NOP));
-	exe.addIns(new NormalIns(Ins::NOP));
-	exe.addIns(new JmpIns(Ins::JMP, Label(0)));
+	exe.addIns(new ConstIns(Ins::CONST, new Value(2, true)));
+	exe.addIns(new ConstIns(Ins::CONST, new Value(3, true)));
+	exe.addIns(new OperatorIns(Ins::ADD));
 	exe.addIns(new NormalIns(Ins::RET));
-	cout << *(exe.getValue(0) -> sp);
 	exe.execute();
+	Value* v = exe.popRuntime();
+	cout << *(v->ip);
+	delete v;
 	return 0;
 }

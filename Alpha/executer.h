@@ -2,6 +2,8 @@
 #define __EXECUTER_P
 
 #include "ins.h"
+#include "exec.h"
+#include "method.h"
 
 class Executer {
 	int pn;
@@ -9,6 +11,7 @@ class Executer {
 	Array<Value*> values;
 	stack<Value*> runtime;
 public:
+	void throwExec(LogicExec* exec);
 	Value* popRuntime();
 	void pushRuntime(Value* value);
 	Value* getValue(int pos);

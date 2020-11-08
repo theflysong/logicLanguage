@@ -43,14 +43,19 @@ void Executer::setValue(int pos, Value* value) {
 	values[pos] = value;
 }
 
-Value* popRuntime() {
-	Value* value = stack.top();
-	stack.pop();
+Value* Executer::popRuntime() {
+	Value* value = runtime.top();
+	runtime.pop();
 	return value;
 }
 
-void pushRuntime(Value* value) {
-	stack.push(value);
+void Executer::pushRuntime(Value* value) {
+	runtime.push(value);
+}
+
+void Executer::throwExec(LogicExec* exec) {
+	cout << exec->msg();
+	delete exec;
 }
 
 void Executer::execute() {
@@ -73,6 +78,26 @@ void Executer::execute() {
 			switch(ins->getType()) {
 				case Ins::JMP:{
 					go(ins->getLabel().pos);
+					break;
+				}
+				case Ins::JZ:{
+					Value* v = popRuntime();
+					if (! (*(v->ip))) {
+						go(ins->getLabel().pos);
+					}
+					if (v -> isconst) {
+						delete v;
+					}
+					break;
+				}
+				case Ins::JNZ:{
+					Value* v = popRuntime();
+					if (*(v->ip)) {
+						go(ins->getLabel().pos);
+					}
+					if (v -> isconst) {
+						delete v;
+					}
 					break;
 				}
 				default:{
@@ -100,8 +125,135 @@ void Executer::execute() {
 			}
 		}
 		else if(pins->getKind()=="operator") {
-			Operator* ins = (Operator*)pins;
+			OperatorIns* ins = (OperatorIns*)pins;
+			switch(ins->getType()) {
+				case Ins::DEC: {
+					Value* v = popRuntime();
+					if (v->isconst) {
+						throwExec(new IncDecConstExec());
+					}
+					else {
+						(*(v->ip)) --;
+					}
+					break;
+				}
+				case Ins::INC: {
+					Value* v = popRuntime();
+					if (v->isconst) {
+						throwExec(new IncDecConstExec());
+					}
+					else {
+						(*(v->ip)) ++;
+					}
+					break;
+				}
+				case Ins::EQU: {
+					Value* v1 = popRuntime();
+					Value* v2 = popRuntime();
+					int i1 = *(v1->ip);
+					int i2 = *(v2->ip);
+					if (i1 == i2) {
+						pushRuntime(new Value(1, true));
+					}
+					else {
+						pushRuntime(new Value(0, true));
+					}
+					if (v1->isconst) {
+						delete v1;
+					}
+					if (v2->isconst) {
+						delete v2;
+					}
+					break;
+				}
+				case Ins::NEQ: {
+					Value* v1 = popRuntime();
+					Value* v2 = popRuntime();
+					int i1 = *(v1->ip);
+					int i2 = *(v2->ip);
+					if (i1 != i2) {
+						pushRuntime(new Value(1, true));
+					}
+					else {
+						pushRuntime(new Value(0, true));
+					}
+					if (v1->isconst) {
+						delete v1;
+					}
+					if (v2->isconst) {
+						delete v2;
+					}
+					break;
+				}
+				case Ins::SUB: {
+					Value* v1 = popRuntime();
+					Value* v2 = popRuntime();
+					int i1 = *(v1->ip);
+					int i2 = *(v2->ip);
+					pushRuntime(new Value(i1 - i2));
+					if (v1->isconst) {
+						delete v1;
+					}
+					if (v2->isconst) {
+						delete v2;
+					}
+					break;
+				}
+				case Ins::ADD: {
+					Value* v1 = popRuntime();
+					Value* v2 = popRuntime();
+					int i1 = *(v1->ip);
+					int i2 = *(v2->ip);
+					pushRuntime(new Value(i1 + i2));
+					if (v1->isconst) {
+						delete v1;
+					}
+					if (v2->isconst) {
+						delete v2;
+					}
+					break;
+				}
+				case Ins::MUL: {
+					Value* v1 = popRuntime();
+					Value* v2 = popRuntime();
+					int i1 = *(v1->ip);
+					int i2 = *(v2->ip);
+					pushRuntime(new Value(i1 * i2));
+					if (v1->isconst) {
+						delete v1;
+					}
+					if (v2->isconst) {
+						delete v2;
+					}
+					break;
+				}
+				case Ins::DIV: {
+					Value* v1 = popRuntime();
+					Value* v2 = popRuntime();
+					int i1 = *(v1->ip);
+					int i2 = *(v2->ip);
+					pushRuntime(new Value(i1 / i2));
+					if (v1->isconst) {
+						delete v1;
+					}
+					if (v2->isconst) {
+						delete v2;
+					}
+					break;
+				}
+			}
 		}
-		ins = getIns();
+		else if(pins->getKind()=="const") {
+			ConstIns* ins = (ConstIns*)pins;
+			switch (pins->getType()) {
+				case Ins::CONST: {
+					pushRuntime(ins->getValue());
+					break;
+				}
+			}
+		}
+		else if(pins->getKind()=="invoke") {
+		}
+		pins = getIns();
 	}
 }

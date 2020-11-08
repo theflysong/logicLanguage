@@ -24,10 +24,11 @@ struct Value {
 		OBJECT
 	};
 	Type type;
-	Value(int v);
-	Value(double v);
-	Value(string v);
-	Value(Object v);
+	bool isconst;
+	Value(int v, bool isConst=false);
+	Value(double v, bool isConst=false);
+	Value(string v, bool isConst=false);
+	Value(Object v, bool isConst=false);
 	~Value();
 };
 

@@ -45,11 +45,18 @@ Value* ConstIns::getValue() {
 GetIns::GetIns(Ins::InsType typeIn, int idIn) : Ins(typeIn, "get"), id(idIn) {
 }
 
-int GetIns::getid() {
+int GetIns::getId() {
 	return id;
 }
 
 OperatorIns::OperatorIns(Ins::InsType typeIn) : Ins(typeIn, "operator"){
+}
+
+InvokeIns::InvokeIns(Ins::InsType typeIn, string methodIn) : Ins(typeIn, "invoke"), method(methodIn){
+}
+
+string InvokeIns::getMethod() {
+	return method;
 }
 
 NormalIns::NormalIns(Ins::InsType typeIn) : Ins(typeIn, "normal") {

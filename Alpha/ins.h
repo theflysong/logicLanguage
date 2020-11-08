@@ -1,7 +1,6 @@
 #ifndef __INS_P
 #define __INS_P
 
-#include "head.h"
 #include "value.h"
 
 class Ins {
@@ -34,7 +33,7 @@ public:
 		BIGQ,
 		SMLQ,
 		NEQ, //OPERATOR
-		CALL
+		CALL //INVOKE
 	};
 private:
 	const InsType type;
@@ -83,6 +82,13 @@ public:
 class OperatorIns : public Ins{
 public:
 	OperatorIns(Ins::InsType typeIn);
+};
+
+class InvokeIns : public Ins{
+	string method;
+public:
+	InvokeIns(Ins::InsType typeIn, string methodIn);
+	string getMethod();
 };
 
 class NormalIns : public Ins{
